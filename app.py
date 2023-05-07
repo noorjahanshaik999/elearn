@@ -25,7 +25,6 @@ with mysql.connector.connect(host=host,user=user,password=password,db=db,port=po
     cursor.execute("create table if not exists signup(username varchar(30) primary key,mobile bigint ,email varchar(70) ,password varchar(40))")
     cursor.execute("create table if not exists profile(username varchar(30) ,score int,course varchar(10),FOREIGN KEY(username)references signup(username))")
 Session(app)
-mysql=MySQL(app)
 @app.route('/')
 def index():
     return render_template('index.html')
