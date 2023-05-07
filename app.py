@@ -11,6 +11,7 @@ from tokenreset import token
 from io import BytesIO
 app=Flask(__name__)
 app.secret_key='hfbfe78hjef'
+app.config['SESSION_TYPE']='filesystem'
 db=os.environ['RDS_DB_NAME']
 user=os.environ['RDS_USERNAME']
 password=os.environ['RDS_PASSWORD']
