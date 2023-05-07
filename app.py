@@ -3,14 +3,11 @@ from flask import Flask,redirect,request,render_template,url_for,flash,session,s
 import mysql.connector
 from flask_session import Session
 from otp import genotp
-from adminotp import adotp
 from cmail import sendmail
-from adminmail import adminsendmail
 import os
 import random
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from tokenreset import token
-from admintokenreset import admintoken
 from io import BytesIO
 app=Flask(__name__)
 app.secret_key='hfbfe78hjef'
@@ -123,7 +120,7 @@ def addnotes():
 def forgetpassword():
     if request.method=='POST':
         email=request.form['id']
-        cursor=mysql.connection.cursor()
+        cursor=mydb.cursor(buffered=True)
         cursor.execute('select email from signup')
         data=cursor.fetchall()
         if (email,) in data:
@@ -149,7 +146,7 @@ def createpassword(token):
             if npass==cpass:
                 cursor=mydb.cursor(buffered=True)
                 cursor.execute('update signup set password=%s where email=%s',[npass,email])
-                cursor=mydb.cursor(buffered=True)
+                mydb.commit()
                 return 'Password reset successfull'
             else:
                 return 'password mismatch'
@@ -273,7 +270,7 @@ def quiz():
 @app.route('/certificate/')
 def certificate():
     if session.get('user'):
-        cursor=mysql.connection.cursor()
+        cursor=mydb.cursor(buffered=True)
         cursor.execute("select username,email from signup where username=%s",[session.get('user')])
         data=cursor.fetchone()
         mydb.commit()
@@ -281,7 +278,7 @@ def certificate():
         return render_template('certificate.html',data=data)
 @app.route('/certificatedownload/')
 def certificatedownload():
-    cursor=mysql.connection.cursor()
+    cursor=mydb.cursor(buffered=True)
     cursor.execute("select username,email from signup where username=%s",[session.get('user')])
     data=cursor.fetchone()
     mydb.commit()
@@ -293,11 +290,11 @@ def certificatedownload():
     return response
 @app.route('/profile',methods=["GET","POST"])
 def profile():     
-    cursor=mysql.connection.cursor()
+    cursor=mydb.cursor(buffered=True)
     cursor.execute('select username,score,course from profile where username=%s',[session.get('user')])
     data=cursor.fetchone()
     print(data)
-    cursor.connection.commit()
+    mydb.commit()
     cursor.close()
     return render_template('profile.html',data=data)
 if __name__ == "__main__":
