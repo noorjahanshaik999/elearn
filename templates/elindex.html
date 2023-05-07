@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Python Compiler</title>
+</head>
+<style>
+    body{
+        padding: 40px;
+    }
+</style>
+<body>
+    <h1>Python Compiler</h1>
+    <form id="compile-form">
+        <label for="code">Enter your Python code:</label><br>
+        <textarea id="code" name="code" rows="10" cols="80" placeholder="Code Here....!"></textarea><br><br>
+        <button type="submit">Compile</button>
+    </form>
+    <div id="output"></div>
+    <script>
+        const form = document.getElementById('compile-form');
+        const outputDiv = document.getElementById('output');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const code = document.getElementById('code').value;
+
+            const response = await fetch('/compile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'code': code
+                })
+            });
+
+            const output = await response.text();
+            outputDiv.innerHTML = output;
+        });
+    </script>
+</body>
+</html>
