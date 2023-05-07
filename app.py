@@ -22,8 +22,8 @@ port=os.environ['RDS_PORT']
 mydb=mysql.connector.connect(host=host,user=user,password=password,db=db,port=port)
 with mysql.connector.connect(host=host,user=user,password=password,db=db,port=port) as conn:
     cursor=conn.cursor()
-    cursor.execute("CREATE TABLE signup(username varchar(30) NOT NULL,mobile bigint ,email varchar(70) ,password varchar(40),PRIMARY KEY (username))")
-    cursor.execute("CREATE TABLE profile(username varchar(30) ,score int,course varchar(10),KEY username(username),FOREIGN KEY (username) REFERENCES signup(username))")
+    cursor.execute("create table signup(username varchar(30) primary key,mobile bigint ,email varchar(70) ,password varchar(40))")
+    cursor.execute("create table profile(username varchar(30) ,score int,course varchar(10),FOREIGN KEY(username)references signup(username))")
 Session(app)
 mysql=MySQL(app)
 @app.route('/')
