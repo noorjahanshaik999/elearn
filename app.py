@@ -109,10 +109,10 @@ def addnotes():
             mobile=request.form['mobile']
             email=request.form['email']
             password=request.form['password']
-            cursor=mysql.connection.cursor()
+            cursor=mydb.cursor(buffered=True)
             email=session.get('user')
             cursor.execute('insert into signup(name,mobile,email,password) values(%s,%s,%s,%s)',[name,mobile,email,password])
-            cursor=mydb.cursor(buffered=True)
+            mydb.commit()
             cursor.close()
             flash(f'{email} added successfully')
             return redirect(url_for('noteshome'))
