@@ -6,8 +6,8 @@ from otp import genotp
 from adminotp import adotp
 from cmail import sendmail
 from adminmail import adminsendmail
-import random
 import os
+import random
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from tokenreset import token
 from admintokenreset import admintoken
